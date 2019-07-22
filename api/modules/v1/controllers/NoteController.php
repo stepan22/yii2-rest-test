@@ -60,7 +60,7 @@ class NoteController extends Controller
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-        $notes = new UsersSearch();
+        $notes = new NotesSearch();
 
         return $notes->search($requestParams);
     }
