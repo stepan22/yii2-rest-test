@@ -1,0 +1,12 @@
+# Codeception Test Suite Configuration
+#
+# Suite for unit or integration tests.
+
+suite_namespace: common\tests\unit
+actor: UnitTester
+bootstrap: false
+modules:
+    enabled:
+        - Yii2:
+            configFile: 'config/main.php'
+            part: fixtures

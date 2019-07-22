@@ -1,0 +1,31 @@
+.hg_/
+^vendor/
+^vagrant/
+
+app/*
+docs/*
+
+api/runtime/*
+backend/runtime/*
+console/runtime/*
+frontend/runtime/*
+
+api/web/assets/*
+backend/web/assets/*
+frontend/web/assets/*
+api/web/uploads/*
+
+api/web/bot-api/*
+api/web/bot-api1/*
+api/web/bot-api2/*
+api/web/vk/*
+api/web/vk1/*
+
+syntax: glob
+.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}
+
+syntax: regexp
+-local.php
+-test.php
+adminer
+.DS_Store
