@@ -20,6 +20,7 @@ class NoteController extends Controller
         'collectionEnvelope' => 'Notes',
     ];
 
+    // Переопределяем действия
     public function actions()
     {
         $actions = parent::actions();
@@ -29,11 +30,10 @@ class NoteController extends Controller
             $actions['create'],
         );
 
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
-
         return $actions;
     }
 
+    // Создаем из POST запроса модель common\models\Notes
     public function actionCreate()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();
@@ -52,6 +52,7 @@ class NoteController extends Controller
         }
     }
 
+    // Выдаем результат запроса с фильтром common\models\NotesSearch
     public function actionIndex()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();

@@ -17,6 +17,7 @@ class UserController extends Controller
         'collectionEnvelope' => 'Users',
     ];
 
+    // Переопределяем действия
     public function actions()
     {
         $actions = parent::actions();
@@ -28,6 +29,7 @@ class UserController extends Controller
         return $actions;
     }
 
+    // Выдаем результат запроса с фильтром common\models\UsersSearch
     public function actionIndex()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();

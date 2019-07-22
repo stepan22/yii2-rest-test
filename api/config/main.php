@@ -8,7 +8,7 @@ $params = array_merge(
 );
 
 return [
-    'id' => 'smartypanel-api',
+    'id' => 'test-api',
     'basePath' => dirname(__DIR__),    
     'bootstrap' => ['log'],
 	'controllerNamespace' => 'api\controllers',
