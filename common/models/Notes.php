@@ -4,13 +4,6 @@ namespace common\models;
 
 use Yii;
 use yii\mongodb\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
-use yii\helpers\ArrayHelper;
-
-use yii\web\Link;
-use yii\web\Linkable;
-use yii\helpers\Url;
-use yii\web\ForbiddenHttpException;
 
 class Notes extends ActiveRecord
 {
@@ -21,26 +14,6 @@ class Notes extends ActiveRecord
     {
         return '{{%notes}}';
     }
-
-    public function getLinks()
-    {
-        return [
-            Link::REL_SELF => Url::to(['note/view', 'id' => $this->_id], true),
-        ];
-    }
-/*
-	public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'createdAt',
-                'updatedAtAttribute' => 'updatedAt',
-                // 'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-*/
 
     /**
      * {@inheritdoc}
@@ -81,28 +54,16 @@ class Notes extends ActiveRecord
             '_id',
             'name',
             'description',
-            'author',
             'author' => function ($model) {
                 return $model->getAuthor;
             },
-            'createdAt',
+            'createdAt' => function ($model) {
+                $createdAt = new DateTime($model->createdAt);
+                return $createdAt->format(DateTime::ISO8601);
+            },            
         ];
 
         return $fields;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function extraFields()
-    {
-        if (!\Yii::$app->user->can('administrator')) {
-            throw new ForbiddenHttpException(Yii::t('app', 'Access denied'));
-        }
-
-        return [
-            'updatedAt'
-        ];
     }
 
     public function getAuthor()

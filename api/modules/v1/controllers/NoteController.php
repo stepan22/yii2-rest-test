@@ -1,11 +1,8 @@
 <?php
 namespace api\modules\v1\controllers;
 
-
 use Yii;
-use yii\data\ActiveDataProvider;
-
-use yii\filters\AccessControl;
+use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 
 use common\models\NotesSearch;
@@ -15,7 +12,7 @@ use common\models\NotesSearch;
  *
  * @author Stepan Karasov <stepan.karasov@gmail.com>
  */
-class NoteController
+class NoteController extends Controller
 {
     public $modelClass = 'common\models\Note';
     public $serializer = [
@@ -28,23 +25,13 @@ class NoteController
         $actions = parent::actions();
 
         unset(
-            $actions['create']
+            $actions['index'],
+            $actions['create'],
         );
 
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
         return $actions;
-    }
-
-    public function prepareDataProvider()
-    {
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
-        if (empty($requestParams)) {
-            $requestParams = Yii::$app->getRequest()->getQueryParams();
-        }
-
-        $notes = new NotesSearch();
-        return $model->search($requestParams);
     }
 
     public function actionCreate()
@@ -63,5 +50,17 @@ class NoteController
         } elseif (!$model->hasErrors()) {
             throw new BadRequestHttpException('Failed to create');
         }
+    }
+
+    public function actionIndex()
+    {
+        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        if (empty($requestParams)) {
+            $requestParams = Yii::$app->getRequest()->getQueryParams();
+        }
+
+        $notes = new UsersSearch();
+
+        return $notes->search($requestParams);
     }
 }

@@ -1,15 +1,15 @@
 <?php
 namespace api\modules\v1\controllers;
 
-use api\modules\oauth2\controllers\OAuth2Controller;
-use yii\filters\AccessControl;
+use yii\rest\Controller;
 
+use common\models\UsersSearch;
 /**
  * User Controller API
  *
  * @author Stepan Karasov <stepan.karasov@gmail.com>
  */
-class UserController /* extends OAuth2Controller */
+class UserController extends Controller
 {
     public $modelClass = 'common\models\User';
     public $serializer = [
@@ -17,81 +17,26 @@ class UserController /* extends OAuth2Controller */
         'collectionEnvelope' => 'Users',
     ];
 
-/*
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['access'] = [
-            'class' => AccessControl::className(),
-            'only' => ['index', 'view', 'update', 'delete'],
-            'rules' => [
-                [
-                    'actions' => ['index'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
-                [
-                    'actions' => ['view'],
-                    'allow' => true,
-                    'roles' => ['?','@'],
-                ],
-                [
-                    'actions' => ['update'],
-                    'allow' => true,
-                    'roles' => ['@'],
-                ],
-                [
-                    'actions' => ['delete'],
-                    'allow' => true,
-                    'roles' => ['administrator'],
-                ],
-            ],
-        ];
-
-        return $behaviors;
-    }
-*/
-
     public function actions()
     {
         $actions = parent::actions();
 
         unset(
-            $actions['delete'],
-            $actions['create']
+            $actions['index'],
         );
-
-        $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
         return $actions;
     }
 
-    public function prepareDataProvider()
+    public function actionIndex()
     {
         $requestParams = Yii::$app->getRequest()->getBodyParams();
         if (empty($requestParams)) {
             $requestParams = Yii::$app->getRequest()->getQueryParams();
         }
 
-        /* @var $modelClass \yii\db\BaseActiveRecord */
-        $modelClass = $this->modelClass;
+        $users = new UsersSearch();
 
-        $query = $modelClass::find();
-        if (!empty($filter)) {
-            $query->andWhere($filter);
-        }
-
-        return Yii::createObject([
-            'class' => ActiveDataProvider::className(),
-            'query' => $query,
-            'pagination' => [
-                'params' => $requestParams,
-            ],
-            'sort' => [
-                'params' => $requestParams,
-            ],
-        ]);
+        return $users->search($requestParams);
     }
-
 }

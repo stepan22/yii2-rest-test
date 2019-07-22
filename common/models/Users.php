@@ -4,15 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\mongodb\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
-use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
-use yii\helpers\ArrayHelper;
-
-use yii\web\Link;
-use yii\web\Linkable;
-use yii\helpers\Url;
-use yii\web\ForbiddenHttpException;
 
 class Users extends ActiveRecord implements IdentityInterface
 {
@@ -29,26 +21,6 @@ class Users extends ActiveRecord implements IdentityInterface
     {
         return '{{%users}}';
     }
-/*   
-	public function getLinks()
-    {
-        return [
-            Link::REL_SELF => Url::to(['user/view', 'id' => $this->id], true),
-        ];
-    }
-* /
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'createdAt',
-                'updatedAtAttribute' => 'updatedAt',
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-*/
 
     /**
      * {@inheritdoc}
@@ -98,24 +70,17 @@ class Users extends ActiveRecord implements IdentityInterface
     {
         $fields = parent::fields();
 
-        unset(
-            $fields['updatedAt'],
-        );
+        return [
+            '_id',
+            'email',
+            'firstName',
+            'lastName',
+            'createdAt' => function ($model) {
+                $createdAt = new DateTime($model->createdAt);
+                return $createdAt->format(DateTime::ISO8601);
+            },
+        ];
 
         return $fields;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function extraFields()
-    {
-        if (!\Yii::$app->user->can('administrator')) {
-            throw new ForbiddenHttpException(Yii::t('app', 'Access denied'));
-        }
-
-        return [
-            'updatedAt'
-        ];
     }
 }

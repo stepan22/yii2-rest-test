@@ -5,12 +5,13 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+
 use common\models\Companies;
 
 /**
- * NotesSearch represents the model behind the search form of `common\models\Companies`.
+ * NotesSearch represents the model behind the search form of `common\models\Notes`.
  */
-class NotesSearch extends Companies
+class NotesSearch extends Notes
 {
     /**
      * {@inheritdoc}
