@@ -21,7 +21,7 @@ class Notes extends ActiveRecord
     public function rules()
     {
         return [
-            [['_id'], 'integer'],
+            [['_id'], 'string'],
             [['createdAt', 'updatedAt'], 'safe'],
             [['name', 'description', 'authorId'], 'string'],
             
@@ -54,9 +54,11 @@ class Notes extends ActiveRecord
             '_id',
             'name',
             'description',
+            // Отдаем коллекцию User
             'author' => function ($model) {
                 return $model->getAuthor;
             },
+            // Приводим к формату ISO 8601
             'createdAt' => function ($model) {
                 $createdAt = new DateTime($model->createdAt);
                 return $createdAt->format(DateTime::ISO8601);

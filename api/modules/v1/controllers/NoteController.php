@@ -64,4 +64,24 @@ class NoteController extends Controller
 
         return $notes->search($requestParams);
     }
+    
+    // Обновляем из PUT/PATCH запроса модель common\models\Notes
+    public function actionUpdate($id)
+    {
+        $requestParams = Yii::$app->getRequest()->getBodyParams();
+        if (empty($requestParams)) {
+            $requestParams = Yii::$app->getRequest()->getQueryParams();
+        }
+
+        $model = Notes::findOne($id);
+        $model->load($requestParams, '');
+        if ($model->save()) {
+            $response = Yii::$app->getResponse();
+            $response->setStatusCode(201);
+            return $model;
+        } elseif (!$model->hasErrors()) {
+            throw new BadRequestHttpException('Failed to update');
+        }
+    }
+    new MongoDB\BSON\ObjectId(
 }

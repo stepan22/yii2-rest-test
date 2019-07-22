@@ -28,7 +28,7 @@ class Users extends ActiveRecord implements IdentityInterface
     public function rules()
     {
 		return [
-            [['_id'], 'integer'],
+            [['_id'], 'string'],
             
             [['email'], 'trim'],
             [['email'], 'required'],
@@ -75,6 +75,7 @@ class Users extends ActiveRecord implements IdentityInterface
             'email',
             'firstName',
             'lastName',
+            // Приводим к формату ISO 8601
             'createdAt' => function ($model) {
                 $createdAt = new DateTime($model->createdAt);
                 return $createdAt->format(DateTime::ISO8601);

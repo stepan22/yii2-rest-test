@@ -19,7 +19,7 @@ class NotesSearch extends Notes
     public function rules()
     {
         return [
-            [['_id'], 'integer'],
+            [['_id'], 'string'],
             [['createdAt', 'updatedAt'], 'safe'],
             [['name', 'description', 'authorId'], 'safe'],
         ];
